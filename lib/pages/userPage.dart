@@ -40,48 +40,59 @@ class _UserPageState extends State<UserPage> {
         ],
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
-            Observer(builder: (_) {
-              return Text(
-                "Name is: ${user.fullName}",
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w400,
-                ),
-              );
-            })
+            Observer(
+              builder: (_) {
+                return Center(
+                  child: Text(
+                    "Name is: ${user.fullName}",
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 100.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                        ),
+                        onPressed: () {
+                          if (user.firstName == "Raj") {
+                            user.firstName = "Neel";
+                          } else {
+                            user.firstName = "Raj";
+                          }
+                        },
+                        child: const Text(
+                          "Change Data",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            )
           ],
         ),
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-            ),
-            onPressed: () {
-              if (user.firstName == "Raj") {
-                user.firstName = "Neel";
-              } else {
-                user.firstName = "Raj";
-              }
-            },
-            child: const Text(
-              "Change Data",
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.w400,
-                fontSize: 20.0,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

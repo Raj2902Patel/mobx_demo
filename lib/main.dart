@@ -10,7 +10,8 @@ import 'package:mobx_demo/store/taskClass.dart';
 final counter = Counter();
 final auth = Auth();
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   GetIt.instance.registerLazySingleton(() => Task());
   GetIt.instance.registerLazySingleton<Data>(() => Data());
 

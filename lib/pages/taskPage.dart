@@ -71,6 +71,7 @@ class _TaskPageState extends State<TaskPage> {
               children: [
                 Expanded(
                   child: TextField(
+                    maxLength: 15,
                     focusNode: _focusNode,
                     controller: textController,
                     decoration: InputDecoration(
@@ -101,15 +102,13 @@ class _TaskPageState extends State<TaskPage> {
                   ),
                 ),
                 IconButton(
-                  onPressed: _isFocused
-                      ? () {
-                          if (textController.text.isNotEmpty) {
-                            taskStore.addTask(textController.text);
-                          }
+                  onPressed: () {
+                    if (textController.text.isNotEmpty) {
+                      taskStore.addTask(textController.text);
+                    }
 
-                          textController.clear();
-                        }
-                      : () {},
+                    textController.clear();
+                  },
                   icon: Icon(
                     CupertinoIcons.add_circled,
                     size: 40.0,
@@ -122,25 +121,184 @@ class _TaskPageState extends State<TaskPage> {
           Expanded(
             child: Observer(
               builder: (_) {
-                return ListView.builder(
-                  itemCount: taskStore.tasks.length,
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text(
-                        taskStore.tasks[index],
-                      ),
-                      trailing: IconButton(
-                        onPressed: () {
-                          taskStore.removeTask(index);
+                return taskStore.tasks.isNotEmpty
+                    ? ListView.builder(
+                        itemCount: taskStore.tasks.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8.0, right: 8.0, bottom: 8.0),
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: ListTile(
+                                  title: Text(
+                                    taskStore.tasks[index],
+                                  ),
+                                  leading: CircleAvatar(
+                                    radius: 25,
+                                    child: Text("${index + 1}"),
+                                  ),
+                                  trailing: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              final TextEditingController
+                                                  editController =
+                                                  TextEditingController(
+                                                      text: taskStore
+                                                          .tasks[index]);
+                                              return AlertDialog(
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          13.0),
+                                                ),
+                                                title: const Center(
+                                                  child: Text('Update Task'),
+                                                ),
+                                                content: TextField(
+                                                  maxLength: 15,
+                                                  controller: editController,
+                                                  decoration: InputDecoration(
+                                                    hintText: "eg. Learning",
+                                                    labelText: "Task",
+                                                    labelStyle: const TextStyle(
+                                                        color: Colors.black,
+                                                        fontSize: 18.0,
+                                                        fontWeight:
+                                                            FontWeight.w400),
+                                                    prefixIcon: const Icon(
+                                                        Icons.assignment),
+                                                    border: OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12.0),
+                                                    ),
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12.0),
+                                                      borderSide:
+                                                          const BorderSide(
+                                                        color: Colors.blueGrey,
+                                                        width: 1.2,
+                                                      ),
+                                                    ),
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12.0),
+                                                      borderSide:
+                                                          const BorderSide(
+                                                        width: 1.2,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                actions: [
+                                                  ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor: Colors
+                                                          .blue
+                                                          .withOpacity(0.3),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(13.0),
+                                                      ),
+                                                    ),
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text(
+                                                      'Cancel',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontSize: 20.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                      backgroundColor: Colors
+                                                          .blue
+                                                          .withOpacity(0.3),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(13.0),
+                                                      ),
+                                                    ),
+                                                    onPressed: () {
+                                                      taskStore.updateTask(
+                                                          index,
+                                                          editController.text);
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: const Text(
+                                                      'Update',
+                                                      style: TextStyle(
+                                                        color: Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontSize: 20.0,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        icon: const Icon(
+                                          Icons.edit_calendar_outlined,
+                                          color: Colors.green,
+                                        ),
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          print("INDEX : $index");
+                                          taskStore.removeTask(index);
+                                        },
+                                        icon: const Icon(
+                                          CupertinoIcons.delete,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
                         },
-                        icon: const Icon(CupertinoIcons.delete),
-                      ),
-                    );
-                  },
-                );
+                      )
+                    : const Center(
+                        child: Text(
+                          "No Data Found!",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      );
               },
             ),
-          )
+          ),
         ],
       ),
     );

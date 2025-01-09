@@ -41,8 +41,7 @@ class _CounterPageState extends State<CounterPage> {
         ],
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
           children: [
             // ReactionBuilder(
             //   builder: (context) {
@@ -112,49 +111,59 @@ class _CounterPageState extends State<CounterPage> {
               ],
               child: Observer(
                 builder: (_) {
-                  return Text(
-                    "Counter Value is: ${counter.count}",
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.w500,
+                  return Center(
+                    child: Text(
+                      "Counter Value is: ${counter.count}",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   );
                 },
               ),
-            )
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 100.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                        ),
+                        onPressed: () {
+                          counter.incrementValue();
+                        },
+                        child: const Icon(CupertinoIcons.add),
+                      ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                        ),
+                        onPressed: () {
+                          counter.decrementValue();
+                        },
+                        child: const Icon(CupertinoIcons.minus),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-      ),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-            ),
-            onPressed: () {
-              counter.incrementValue();
-            },
-            child: const Icon(CupertinoIcons.add),
-          ),
-          const SizedBox(
-            width: 10.0,
-          ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12.0),
-              ),
-            ),
-            onPressed: () {
-              counter.decrementValue();
-            },
-            child: const Icon(CupertinoIcons.minus),
-          ),
-        ],
       ),
     );
   }
